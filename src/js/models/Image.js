@@ -20,6 +20,14 @@ export const Image = {
   },
 
   clearPixel: (x, y) => {
-    Image.setPixel(x, y, "#FFFFFF");
+    Image.setPixel(x, y, null);
+  },
+
+  clear: () => {
+    for (let y = 0; y < Image.pixels.length; y++) {
+      for (let x = 0; x < Image.pixels[y].length; x++) {
+        Image.clearPixel(x, y);
+      }
+    }
   },
 };
