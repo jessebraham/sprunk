@@ -1,0 +1,20 @@
+/* Import all of Tailwind CSS */
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+
+/* General site styles */
+
+html, body {
+  @apply h-screen w-screen;
+}
+
+body {
+  @apply flex items-center justify-center;
+}
+
+canvas {
+  @apply border border-black;
+}
