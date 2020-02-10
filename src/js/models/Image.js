@@ -30,4 +30,28 @@ export const Image = {
       }
     }
   },
+
+  // https://en.wikipedia.org/wiki/Flood_fill#Stack-based_recursive_implementation_(four-way)
+  floodFill: (x, y, targetColour, replacementColour) => {
+    if (
+      Image.validCoordinate(x, y) &&
+      Image.getPixel(x, y) === targetColour &&
+      targetColour !== replacementColour
+    ) {
+      Image.setPixel(x, y, replacementColour);
+    } else {
+      return;
+    }
+
+    Image.floodFill(x + 0, y + 1, targetColour, replacementColour);
+    Image.floodFill(x + 0, y - 1, targetColour, replacementColour);
+    Image.floodFill(x - 1, y + 0, targetColour, replacementColour);
+    Image.floodFill(x + 1, y + 0, targetColour, replacementColour);
+  },
+
+  validCoordinate: (x, y) => {
+    return (
+      x >= 0 && y >= 0 && x < Image.pixels[0].length && y < Image.pixels.length
+    );
+  },
 };

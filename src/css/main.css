@@ -16,11 +16,6 @@ body {
 }
 
 
-canvas {
-  @apply border border-black;
-}
-
-
 #tools > div {
   @apply bg-gray-200 cursor-pointer;
 }

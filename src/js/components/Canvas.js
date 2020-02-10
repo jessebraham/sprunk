@@ -14,42 +14,47 @@ export default class Canvas {
   }
 
   drawGrid() {
-    // Draw a grid on the canvas with `this.gridSize` number of "pixels" in
-    // either dimension, each of which is `this.pixelSize` pixels square.
+    // Draw a grid on the grid canvas with `this.gridSize` number of "pixels"
+    // in either dimension, each of which is `this.pixelSize` pixels square.
     this.gridCtx.beginPath();
     this.gridCtx.strokeStyle = "#DDDDDD";
-    this.gridCtx.lineWidth = "1";
+    this.gridCtx.lineWidth = 1;
 
-    for (let y = this.pixelSize; y < this.canvasSize; y += this.pixelSize) {
-      this.gridCtx.moveTo(0.5 + y, 1);
-      this.gridCtx.lineTo(0.5 + y, this.canvasSize - 1);
-    }
+    for (let i = this.pixelSize; i < this.canvasSize; i += this.pixelSize) {
+      // Draw the horizontal grid lines.
+      this.gridCtx.moveTo(0.5 + i, 0);
+      this.gridCtx.lineTo(0.5 + i, this.canvasSize);
 
-    for (let x = this.pixelSize; x < this.canvasSize; x += this.pixelSize) {
-      this.gridCtx.moveTo(1, 0.5 + x);
-      this.gridCtx.lineTo(this.canvasSize - 1, 0.5 + x);
+      // Draw the vertical grid lines.
+      this.gridCtx.moveTo(0, 0.5 + i);
+      this.gridCtx.lineTo(this.canvasSize, 0.5 + i);
     }
 
     this.gridCtx.stroke();
 
     // Draw darker lines along the centers of both axes to clearly show the
-    // location of the center of the canvas.
+    // location of the center of the grid canvas.
     this.gridCtx.beginPath();
     this.gridCtx.strokeStyle = "#000000";
-    this.gridCtx.lineWidth = "1";
+    this.gridCtx.lineWidth = 1;
 
-    this.gridCtx.moveTo(0.5 + this.canvasSize / 2, 1);
-    this.gridCtx.lineTo(0.5 + this.canvasSize / 2, this.canvasSize - 1);
+    // Draw the horizontal dark grid line.
+    this.gridCtx.moveTo(0, 0.5 + this.canvasSize / 2);
+    this.gridCtx.lineTo(this.canvasSize, 0.5 + this.canvasSize / 2);
 
-    this.gridCtx.moveTo(1, 0.5 + this.canvasSize / 2);
-    this.gridCtx.lineTo(this.canvasSize - 1, 0.5 + this.canvasSize / 2);
+    // Draw the vertical dark grid line.
+    this.gridCtx.moveTo(0.5 + this.canvasSize / 2, 0);
+    this.gridCtx.lineTo(0.5 + this.canvasSize / 2, this.canvasSize);
 
     this.gridCtx.stroke();
   }
 
   drawImage() {
+    // Draw the image data, stored in `Image.pixels`, to the image canvas.
     for (let y = 0; y < this.canvasSize / this.pixelSize; y++) {
       for (let x = 0; x < this.canvasSize / this.pixelSize; x++) {
+        // If the colour for the given "pixel" is set to `null`, we'll leave
+        // the "pixel"'s fill colour set to transparent.
         const pixel = Image.getPixel(x, y);
         if (pixel === null) {
           continue;
@@ -66,54 +71,79 @@ export default class Canvas {
     }
   }
 
-  oncreate() {
-    const gridCanvas = document.querySelector("#gridCanvas");
-    const imageCanvas = document.querySelector("#imageCanvas");
+  registerEventHandlers() {
+    this.imageCanvas.addEventListener("click", e => {
+      const {
+        clientX,
+        clientY,
+        target: {
+          offsetParent: { offsetLeft, offsetTop },
+        },
+      } = e;
 
-    this.gridCtx = gridCanvas.getContext("2d");
-    this.ctx = imageCanvas.getContext("2d");
+      // Convert client coordinates to grid coordinates.
+      const x = Math.floor((clientX - offsetLeft) / this.pixelSize);
+      const y = Math.floor((clientY - offsetTop) / this.pixelSize);
 
-    // Force a redraw in order to draw the grid and images on their respective
-    // canvases.
-    m.redraw();
-
-    imageCanvas.addEventListener("click", e => {
-      const { clientX, clientY, target } = e;
-      const x = Math.floor(
-        (clientX - target.offsetParent.offsetLeft) / this.pixelSize,
-      );
-      const y = Math.floor(
-        (clientY - target.offsetParent.offsetTop) / this.pixelSize,
-      );
-
-      if (Tool.selected.name === "Draw") {
-        Image.setPixel(x, y, Colour.selected.hexValue);
-      } else if (Tool.selected.name === "Erase") {
-        Image.clearPixel(x, y);
-      } else if (Tool.selected.name === "Select") {
-        const pixel = Image.getPixel(x, y);
-        const colour = Colour.fromHexValue(pixel);
-        Colour.select(colour);
+      let targetColour;
+      switch (Tool.selected.name) {
+        case "Draw":
+          Image.setPixel(x, y, Colour.selected.hexValue);
+          break;
+        case "Erase":
+          Image.clearPixel(x, y);
+          break;
+        case "Select":
+          targetColour = Colour.fromHexValue(Image.getPixel(x, y));
+          Colour.select(targetColour);
+          break;
+        case "Fill":
+          targetColour = Image.getPixel(x, y);
+          Image.floodFill(x, y, targetColour, Colour.selected.hexValue);
+          break;
       }
 
       m.redraw();
     });
   }
 
+  oncreate({ dom }) {
+    // Two separate canvases exist. The grid canvas is for drawing the grid.
+    // The image canvas is for displaying the image. Pretty self-explanatory.
+    // This makes it easy to save the image data to a file without including
+    // the grid lines.
+    this.gridCanvas = dom.querySelector("#gridCanvas");
+    this.gridCtx = this.gridCanvas.getContext("2d");
+
+    this.imageCanvas = dom.querySelector("#imageCanvas");
+    this.ctx = this.imageCanvas.getContext("2d");
+
+    // Register all canvas event listeners once the dom element has been
+    // created.
+    this.registerEventHandlers();
+
+    // Forcing an immediate redraw will display the grid on the canvas upon
+    // initial load.
+    m.redraw();
+  }
+
   onupdate() {
+    // Clear the grid canvas, and redraw the grid.
     this.gridCtx.clearRect(0, 0, this.canvasSize, this.canvasSize);
     this.drawGrid();
 
+    // Clear the image canvas, and redraw the image.
     this.ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
     this.drawImage();
   }
 
   view() {
-    return m("div", { class: "relative" }, [
+    return m("div", { class: "border border-black relative" }, [
       m("canvas", {
         height: this.canvasSize,
         width: this.canvasSize,
         id: "gridCanvas",
+        class: "bg-gray-100",
       }),
       m("canvas", {
         height: this.canvasSize,

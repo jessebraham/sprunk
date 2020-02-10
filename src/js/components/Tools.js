@@ -13,8 +13,11 @@ export default class Tools {
         "div",
         {
           id: `${tool.name.toLowerCase()}-tool`,
-          onclick: e => this.selectTool(e.target, tool),
           title: tool.name,
+          onclick: e => {
+            e.preventDefault();
+            this.selectTool(e.target, tool);
+          },
         },
         tool.icon,
       ),
@@ -26,12 +29,11 @@ export default class Tools {
       .querySelectorAll("#tools .active")
       .forEach(elem => elem.classList.remove("active"));
 
-    while (elem.tagName !== "DIV") {
+    while (
+      elem.tagName !== "DIV" ||
+      (elem.classList && elem.classList.contains("icon"))
+    ) {
       elem = elem.parentElement;
-      if (elem.classList && elem.classList.contains("icon")) {
-        elem = elem.parentElement;
-        break;
-      }
     }
 
     elem.classList.add("active");
