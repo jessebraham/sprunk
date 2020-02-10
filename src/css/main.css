@@ -15,6 +15,25 @@ body {
   @apply flex items-center justify-center;
 }
 
+
 canvas {
   @apply border border-black;
 }
+
+
+#tools > div {
+  @apply bg-gray-200 cursor-pointer;
+}
+
+#tools > div:hover,
+#tools > div.active {
+  @apply bg-gray-400;
+}
+
+#tools .icon {
+  @apply flex h-8 items-center justify-center w-8;
+}
+
+  #tools .icon svg {
+    @apply h-4 w-4;
+  }
