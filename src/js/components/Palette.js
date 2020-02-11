@@ -12,7 +12,7 @@ export default class Palette {
       m("div", {
         class: "cursor-pointer h-8 w-8",
         style: `background: ${colour.hexValue}`,
-        onclick: () => Colour.select(colour),
+        onclick: () => Colour.select(colour.hexValue),
         title: colour.name,
       }),
     );

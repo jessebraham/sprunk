@@ -3,7 +3,7 @@ import m from "mithril";
 import Canvas from "../components/Canvas";
 import MenuBar from "../components/MenuBar";
 import Palette from "../components/Palette";
-import Tools from "../components/Tools";
+import Toolbox from "../components/Toolbox";
 
 export default class App {
   view() {
@@ -11,7 +11,7 @@ export default class App {
       m(MenuBar),
       m("div", { class: "flex" }, [
         m("div", m(Canvas)),
-        m("div", { class: "flex flex-col ml-4" }, [m(Tools), m(Palette)]),
+        m("div", { class: "flex flex-col ml-4" }, [m(Toolbox), m(Palette)]),
       ]),
     ]);
   }

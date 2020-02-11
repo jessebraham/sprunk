@@ -26,11 +26,8 @@ export const Colour = {
     Colour.selected = Colour.palette[0];
   },
 
-  select: colour => {
+  select: hexValue => {
+    const colour = Colour.palette.find(colour => colour.hexValue === hexValue);
     Colour.selected = colour;
-  },
-
-  fromHexValue: hexValue => {
-    return Colour.palette.find(colour => colour.hexValue === hexValue);
   },
 };

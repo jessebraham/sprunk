@@ -94,8 +94,7 @@ export default class Canvas {
           Image.clearPixel(x, y);
           break;
         case "Select":
-          targetColour = Colour.fromHexValue(Image.getPixel(x, y));
-          Colour.select(targetColour);
+          Colour.select(Image.getPixel(x, y));
           break;
         case "Fill":
           targetColour = Image.getPixel(x, y);

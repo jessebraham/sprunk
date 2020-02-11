@@ -16,19 +16,30 @@ body {
 }
 
 
+/* Icon buttons */
+
+#menu ul li a,
+#tools .icon {
+  @apply text-black;
+}
+
+#menu li:not(.flex-1),
 #tools > div {
   @apply bg-gray-200 cursor-pointer;
 }
 
+#menu li:not(.flex-1):hover,
 #tools > div:hover,
 #tools > div.active {
   @apply bg-gray-400;
 }
 
+#menu .icon,
 #tools .icon {
   @apply flex h-8 items-center justify-center w-8;
 }
 
-  #tools .icon svg {
-    @apply h-4 w-4;
-  }
+#menu .icon svg,
+#tools .icon svg {
+  @apply h-4 w-4;
+}

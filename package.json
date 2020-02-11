@@ -1,7 +1,7 @@
 {
   "name": "sprunk",
   "version": "0.1.0",
-  "description": "",
+  "description": "A minimalist pixel art editor built using Mithril",
   "main": "index.js",
   "private": true,
   "babel": {
@@ -22,7 +22,6 @@
     "type": "git",
     "url": "git+https://github.com/jessebraham/sprunk.git"
   },
-  "keywords": [],
   "author": {
     "name": "Jesse Braham",
     "email": "jesse@beta7.io"
@@ -35,6 +34,7 @@
   "dependencies": {
     "mithril": "^2.0.4",
     "mithril-feather-icons": "^0.1.2",
+    "mousetrap": "^1.6.5",
     "tailwindcss": "^1.2.0"
   },
   "devDependencies": {
