@@ -30,7 +30,7 @@ export default class MenuBar {
       { title: "Save", icon: Save, handler: this.saveDocument },
       null, // `null` indicates a spacer element
       {
-        title: "Github",
+        title: "View project on Github",
         icon: Github,
         href: "https://github.com/jessebraham/sprunk",
       },

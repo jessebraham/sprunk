@@ -8,7 +8,7 @@ import Toolbox from "../components/Toolbox";
 
 export default class App {
   view() {
-    return m("div", { class: "p-4" }, [
+    return m("div", [
       m(MenuBar),
       m(StatusBar),
       m("div", { class: "flex mt-4", id: "editor" }, [

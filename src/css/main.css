@@ -18,14 +18,18 @@ body {
 
 /* Icon buttons */
 
-#menu ul li a,
+#menu li a,
 #tools .icon {
   @apply text-black;
 }
 
-#menu li:not(.flex-1),
+#menu li,
 #tools > div {
-  @apply bg-gray-200 cursor-pointer;
+  @apply bg-gray-100;
+}
+
+#tools > div {
+  @apply cursor-pointer;
 }
 
 #menu li:not(.flex-1):hover,

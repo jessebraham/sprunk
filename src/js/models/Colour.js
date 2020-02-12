@@ -23,11 +23,10 @@ export const Colour = {
 
   init: () => {
     Colour.palette = DEFAULT_COLOUR_PALETTE;
-    Colour.selected = Colour.palette[0];
+    Colour.select(Colour.palette[0].hexValue);
   },
 
   select: hexValue => {
-    const colour = Colour.palette.find(colour => colour.hexValue === hexValue);
-    Colour.selected = colour;
+    Colour.selected = hexValue;
   },
 };

@@ -1,19 +1,16 @@
 import { Status } from "./Status";
 
-// For icon names see https://feathericons.com/
-const TOOLS = [
-  { name: "Draw", icon: "Edit2", shortcut: "d" },
-  { name: "Erase", icon: "Trash2", shortcut: "e" },
-  { name: "Fill", icon: "Droplet", shortcut: "f" },
-  { name: "Select", icon: "Crosshair", shortcut: "i" },
-];
-
 export const Tool = {
-  list: null,
+  // For icon names see https://feathericons.com/
+  list: [
+    { name: "Draw", icon: "Edit2", shortcut: "d" },
+    { name: "Erase", icon: "Trash2", shortcut: "e" },
+    { name: "Fill", icon: "Droplet", shortcut: "f" },
+    { name: "Select", icon: "Crosshair", shortcut: "i" },
+  ],
   selected: null,
 
   init: () => {
-    Tool.list = TOOLS;
     Tool.selected = Tool.list[0];
   },
 

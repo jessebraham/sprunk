@@ -27,8 +27,8 @@ export default class Palette {
       ),
       m("div", { class: "border border-black" }, [
         m("div", {
-          class: "bg-gray-200 h-16 w-16",
-          style: `background: ${Colour.selected.hexValue}`,
+          class: "bg-gray-100 h-16 w-16",
+          style: `background: ${Colour.selected}`,
         }),
       ]),
     ]);

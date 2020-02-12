@@ -94,7 +94,7 @@ export default class Canvas {
       let targetColour;
       switch (Tool.selected.name) {
         case "Draw":
-          Image.setPixel(x, y, Colour.selected.hexValue);
+          Image.setPixel(x, y, Colour.selected);
           break;
         case "Erase":
           Image.clearPixel(x, y);
@@ -104,7 +104,7 @@ export default class Canvas {
           break;
         case "Fill":
           targetColour = Image.getPixel(x, y);
-          Image.floodFill(x, y, targetColour, Colour.selected.hexValue);
+          Image.floodFill(x, y, targetColour, Colour.selected);
           break;
       }
 
