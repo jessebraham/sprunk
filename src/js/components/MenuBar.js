@@ -1,5 +1,12 @@
 import m from "mithril";
-import { File, Github, Save } from "mithril-feather-icons";
+import {
+  File,
+  Github,
+  Save,
+  SkipBack,
+  SkipForward,
+} from "mithril-feather-icons";
+import Mousetrap from "mousetrap";
 
 import { Image } from "../models/Image";
 
@@ -28,6 +35,8 @@ export default class MenuBar {
     this.items = [
       { title: "New", icon: File, handler: this.newDocument },
       { title: "Save", icon: Save, handler: this.saveDocument },
+      { title: "Undo", icon: SkipBack, handler: Image.undo },
+      { title: "Redo", icon: SkipForward, handler: Image.redo },
       null, // `null` indicates a spacer element
       {
         title: "View project on Github",
@@ -39,7 +48,7 @@ export default class MenuBar {
 
   newDocument() {
     if (confirm("Create a new document? All unsaved progress will be lost.")) {
-      Image.clear();
+      Image.reset();
     }
   }
 
@@ -52,6 +61,24 @@ export default class MenuBar {
     const canvas = document.querySelector("#imageCanvas");
     elem.href = canvas.toDataURL();
     elem.download = "canvas.png";
+  }
+
+  registerEventHandlers() {
+    // For both the Undo and Redo functionality, we need to force a redraw in
+    // order to update the canvas, as the events fired by keyboard shortcuts
+    // do not trigger one.
+    Mousetrap.bind("ctrl+z", () => {
+      Image.undo();
+      m.redraw();
+    });
+    Mousetrap.bind(["ctrl+shift+z", "ctrl+y"], () => {
+      Image.redo();
+      m.redraw();
+    });
+  }
+
+  oncreate() {
+    this.registerEventHandlers();
   }
 
   view() {

@@ -11,7 +11,7 @@ export default class Canvas {
     this.pixelSize = 32;
     this.canvasSize = this.gridSize * this.pixelSize;
 
-    Image.reset(this.gridSize);
+    Image.init(this.gridSize);
   }
 
   drawGrid() {
@@ -104,7 +104,7 @@ export default class Canvas {
           break;
         case "Fill":
           targetColour = Image.getPixel(x, y);
-          Image.floodFill(x, y, targetColour, Colour.selected);
+          Image.fill(x, y, targetColour, Colour.selected);
           break;
       }
 
