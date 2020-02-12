@@ -3,6 +3,7 @@ import m from "mithril";
 import { Colour } from "../models/Colour";
 import { Image } from "../models/Image";
 import { Tool } from "../models/Tool";
+import { Status } from "../models/Status";
 
 export default class Canvas {
   constructor() {
@@ -71,19 +72,24 @@ export default class Canvas {
     }
   }
 
-  registerEventHandlers() {
-    this.imageCanvas.addEventListener("click", e => {
-      const {
-        clientX,
-        clientY,
-        target: {
-          offsetParent: { offsetLeft, offsetTop },
-        },
-      } = e;
+  gridCoordinate(e) {
+    const {
+      clientX,
+      clientY,
+      target: {
+        offsetParent: { offsetLeft, offsetTop },
+      },
+    } = e;
 
-      // Convert client coordinates to grid coordinates.
-      const x = Math.floor((clientX - offsetLeft) / this.pixelSize);
-      const y = Math.floor((clientY - offsetTop) / this.pixelSize);
+    const x = Math.floor((clientX - offsetLeft) / this.pixelSize);
+    const y = Math.floor((clientY - offsetTop) / this.pixelSize);
+
+    return { x, y };
+  }
+
+  registerClickHandler() {
+    this.imageCanvas.addEventListener("click", e => {
+      const { x, y } = this.gridCoordinate(e);
 
       let targetColour;
       switch (Tool.selected.name) {
@@ -106,6 +112,19 @@ export default class Canvas {
     });
   }
 
+  registerMouseMoveHandler() {
+    this.imageCanvas.addEventListener("mousemove", e => {
+      const coord = this.gridCoordinate(e);
+      Status.setCoordinate(coord);
+      m.redraw();
+    });
+
+    this.imageCanvas.addEventListener("mouseleave", e => {
+      Status.setCoordinate(null);
+      m.redraw();
+    });
+  }
+
   oncreate({ dom }) {
     // Two separate canvases exist. The grid canvas is for drawing the grid.
     // The image canvas is for displaying the image. Pretty self-explanatory.
@@ -119,7 +138,8 @@ export default class Canvas {
 
     // Register all canvas event listeners once the dom element has been
     // created.
-    this.registerEventHandlers();
+    this.registerClickHandler();
+    this.registerMouseMoveHandler();
 
     // Forcing an immediate redraw will display the grid on the canvas upon
     // initial load.

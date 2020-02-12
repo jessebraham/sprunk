@@ -57,7 +57,7 @@ export default class MenuBar {
   view() {
     return m(
       "div",
-      { class: "mb-4", id: "menu" },
+      { id: "menu" },
       m(
         "ul",
         { class: "bg-gray-100 border border-black flex" },

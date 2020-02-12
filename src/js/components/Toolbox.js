@@ -11,10 +11,10 @@ class ToolboxItem {
       "div",
       {
         id: `${attrs.name.toLowerCase()}-tool`,
-        title: attrs.name,
+        title: `${attrs.name} (${attrs.shortcut.toUpperCase()})`,
         onclick: e => {
           e.preventDefault();
-          Tool.select(attrs); // `attrs` ===  `tools`
+          Tool.select(attrs); // `attrs` ===  `tool`
         },
       },
       icons[attrs.icon],
@@ -30,7 +30,13 @@ export default class Toolbox {
   registerEventHandlers() {
     for (const tool of Tool.list) {
       if ("shortcut" in tool) {
-        Mousetrap.bind(tool.shortcut, () => Tool.select(tool));
+        Mousetrap.bind(tool.shortcut, () => {
+          // Once the tool has been selected, we need to force a redraw in
+          // order to update the status bar, as the event fired by keyboard
+          // shortcut does not trigger one.
+          Tool.select(tool);
+          m.redraw();
+        });
       }
     }
   }

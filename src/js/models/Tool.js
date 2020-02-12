@@ -1,3 +1,5 @@
+import { Status } from "./Status";
+
 // For icon names see https://feathericons.com/
 const TOOLS = [
   { name: "Draw", icon: "Edit2", shortcut: "d" },
@@ -24,5 +26,6 @@ export const Tool = {
     elem.classList.add("active");
 
     Tool.selected = tool;
+    Status.setMessage(`${tool.name} tool selected`);
   },
 };
