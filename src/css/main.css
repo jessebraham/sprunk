@@ -19,6 +19,7 @@ body {
 /* Icon buttons */
 
 #menu li a,
+#statusBar span,
 #tools .icon {
   @apply text-black;
 }

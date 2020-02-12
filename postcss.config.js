@@ -35,7 +35,7 @@ module.exports = ctx => ({
           extensions: ["html", "css", "js"],
         },
       ],
-      whitelist: [],
+      whitelist: ["svg"],
       whitelistPatternsChildren: [],
     }),
     PRODUCTION && cssnano({
